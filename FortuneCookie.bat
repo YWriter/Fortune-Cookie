@@ -1,0 +1,2 @@
+FortuneCookie.bat
+pause
