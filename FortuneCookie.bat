@@ -1,2 +1,2 @@
-FortuneCookie.bat
+FortuneCookie.py
 pause
