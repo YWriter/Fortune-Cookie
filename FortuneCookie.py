@@ -15,9 +15,9 @@ class Application(Frame):
   def create_widgets(self):
     """ The fortune cookie will pick a fortune based on your mood. """
 
-    # Drop-down menu for moods
+    # Drop down menu for moods
     self.mood_choice = StringVar(self)
-    moods = ["Happy", "Sad", "Neutral"]
+    moods = ["Happy", "Sad", "Neutral", "Annoyed", "Stressed"]
     self.mood_choice.set("Happy")
     self.mood_menu = OptionMenu(self, self.mood_choice, *moods)
     Label(self, text="Your current mood:").grid(row = 0, column = 0, sticky = W)
@@ -25,8 +25,8 @@ class Application(Frame):
 
     # Button for getting fortune
     submitBtn = Button(self,
-                       text = "Get My Fortune.",
-                       command = self.acquire_fortune # function for getting mood
+                       text = "Get My Fortune",
+                       command = self.acquire_fortune
                        ).grid(row = 2, column = 1, sticky = W)
 
     # Text box for fortune
@@ -41,17 +41,36 @@ class Application(Frame):
     # Dictionaries for fortunes
     happyFortunes = {1 : "You will have a grand time today!",
                      2 : "You are a rockstar! Keep rocking!",
-                     3 : "Cultivate a new habit today, reap the benefits forever."}
+                     3 : "Cultivate a new habit today, reap the benefits forever.",
+                     4 : "A new beginning is on its way.",
+                     5 : "The happiest people are the ones who learn to appreciate everything."}
 
     sadFortunes = {1 : "Treat yourself today; Feel better tomorrow.",
                    2 : "Time heals most wounds.",
-                   3 : "If something is troubling you, talk to a friend or a loved one."}
+                   3 : "If something is troubling you, talk to a friend or a loved one.",
+                   4 : "Today is a new day.",
+                   5 : "What doesn't kill you makes you stronger."}
 
     neutralFortunes = {1 : "Bored? Do something crazy different!",
                        2 : "Happiness comes from within.",
-                       3 : "Take some time off to enjoy the little things."}
+                       3 : "Take some time off to enjoy the little things.",
+                       4 : "Failure is part of life.",
+                       5 : "Effort is caring. Determination is passion."}
+    
+    annoyedFortunes = {1 : "The more you let it get to you, the weaker you become.",
+                       2 : "Never let pressure guide your decisions. Your decisions are your own.",
+                       3 : "To live is to feel.",
+                       4 : "Take a break. You deserve it.",
+                       5 : "Move on. Emotions are temporary. Life is fleeting."}
 
-    num = random.randint(1,3)
+    stressedFortunes = {1 : "You're doing great. Keep up the good work.",
+                        2 : "Whether you succeed or fail, it will pay off in the end.",
+                        3 : "Take a nap. Recharge.",
+                        4 : "If it is truly worth it, you will make time for it.",
+                        5 : "Value yourself. You are as rich as you make yourself out to be."}
+                       
+
+    num = random.randint(1,5)
     mood = self.mood_choice.get()
     fortune_text = ""
     if mood == "Happy":
@@ -60,6 +79,10 @@ class Application(Frame):
       fortune_text = sadFortunes.get(num)
     elif mood == "Neutral":
       fortune_text = neutralFortunes.get(num)
+    elif mood == "Annoyed":
+      fortune_text = annoyedFortunes.get(num)
+    elif mood == "Stressed":
+      fortune_text = stressedFortunes.get(num)
       
     self.text_box.insert(0.0, fortune_text)
     
