@@ -1,5 +1,10 @@
 # Simple Fortune Cookie
+# last edit 2/17/23
 ## hopefully will get more complex as revisions are made
+
+moodPath = "resources/moods.txt" # read moods from moods.txt in resources
+fortunesPath = "resources/fortunes/" # append + input mood + ".txt" later in code
+cookiePicPath = "resources/images/fortuneCookie.png" # image location
 
 from tkinter import *
 import random
@@ -17,77 +22,58 @@ class Application(Frame):
 
     # Drop down menu for moods
     self.mood_choice = StringVar(self)
-    moods = ["Happy", "Sad", "Neutral", "Annoyed", "Stressed"]
-    self.mood_choice.set("Happy")
+    
+    # read moods from file and store into mood list
+    with open(moodPath) as file:
+      moods = [line.rstrip() for line in file]
+    
+    # configure the grid for allowing mood choice
+    self.mood_choice.set(moods[0])
     self.mood_menu = OptionMenu(self, self.mood_choice, *moods)
     Label(self, text="Your current mood:").grid(row = 0, column = 0, sticky = W)
     self.mood_menu.grid(row = 0, column = 1, sticky = W)
 
-    # Button for getting fortune
-    submitBtn = Button(self,
-                       text = "Get My Fortune",
-                       command = self.acquire_fortune
-                       ).grid(row = 2, column = 1, sticky = W)
+    # display fortune cookie image button to acquire fortunes
+    self.cookiePicture = PhotoImage(file = cookiePicPath)
+    self.cookieImage = self.cookiePicture.subsample(2, 2)
+    self.cookiePanel = Button(self, text = "Click Me!",
+                       command = self.acquire_fortune, image = self.cookieImage, compound = TOP).grid(row = 1, column = 2, sticky = W)
 
     # Text box for fortune
     self.text_box = Text(self, width = 50, height = 10, wrap = WORD)
+    self.text_box.configure(state='disabled') # makes text box read-only
     self.text_box.grid(row = 1, column = 0, columnspan = 2)
     
   def acquire_fortune(self):
-    """ Gets a random number; Gets the user's mood; Produces a fortune. """
+    """ Gets the user's mood; Produces a fortune. """
     # Deletes old entry
+    self.text_box.configure(state='normal')
     self.text_box.delete(0.0, END)
-    
-    # Dictionaries for fortunes
-    happyFortunes = {1 : "You will have a grand time today!",
-                     2 : "You are a rockstar! Keep rocking!",
-                     3 : "Cultivate a new habit today, reap the benefits forever.",
-                     4 : "A new beginning is on its way.",
-                     5 : "The happiest people are the ones who learn to appreciate everything."}
-
-    sadFortunes = {1 : "Treat yourself today; Feel better tomorrow.",
-                   2 : "Time heals most wounds.",
-                   3 : "If something is troubling you, talk to a friend or a loved one.",
-                   4 : "Today is a new day.",
-                   5 : "What doesn't kill you makes you stronger."}
-
-    neutralFortunes = {1 : "Bored? Do something crazy different!",
-                       2 : "Happiness comes from within.",
-                       3 : "Take some time off to enjoy the little things.",
-                       4 : "Failure is part of life.",
-                       5 : "Effort is caring. Determination is passion."}
-    
-    annoyedFortunes = {1 : "The more you let it get to you, the weaker you become.",
-                       2 : "Never let pressure guide your decisions. Your decisions are your own.",
-                       3 : "To live is to feel.",
-                       4 : "Take a break. You deserve it.",
-                       5 : "Move on. Emotions are temporary. Life is fleeting."}
-
-    stressedFortunes = {1 : "You're doing great. Keep up the good work.",
-                        2 : "Whether you succeed or fail, it will pay off in the end.",
-                        3 : "Take a nap. Recharge.",
-                        4 : "If it is truly worth it, you will make time for it.",
-                        5 : "Value yourself. You are as rich as you make yourself out to be."}
                        
-
-    num = random.randint(1,5)
     mood = self.mood_choice.get()
-    fortune_text = ""
-    if mood == "Happy":
-      fortune_text = happyFortunes.get(num)
-    elif mood == "Sad":
-      fortune_text = sadFortunes.get(num)
-    elif mood == "Neutral":
-      fortune_text = neutralFortunes.get(num)
-    elif mood == "Annoyed":
-      fortune_text = annoyedFortunes.get(num)
-    elif mood == "Stressed":
-      fortune_text = stressedFortunes.get(num)
-      
-    self.text_box.insert(0.0, fortune_text)
+
+    # read fortunes from correct file
+    # file name of fortunes is the same as variable mood
+    path = fortunesPath + mood.lower() + ".txt"
+    myFortunes = [] # store all read fortunes
+    with open(path) as file:
+      for line in file:
+        myFortunes.append(line)
     
+    # grab random fortune
+    num = random.randint(0,len(myFortunes)-1)
+    fortune_text = myFortunes[num]
+    
+    # insert fortune
+    self.text_box.insert(0.0, fortune_text)
+    self.text_box.configure(state='disabled')
+    
+
+
 # main
 root = Tk()
 root.title("Fortune Cookie")
 app = Application(root)
 root.mainloop()
+
+
