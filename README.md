@@ -11,7 +11,8 @@ Update: Added more moods & fortunes 10:27 AM 2/10/20 CST
 
 ----
 
-Update: Revamp of code / minor GUI changes / resources folder added 10:28 AM 2/17/23 CST
+Update: Revamp of code / minor GUI changes / resources folder added
 Note: program reads txt files line-by-line
 
+10:28 AM 2/17/23 CST
 ----
