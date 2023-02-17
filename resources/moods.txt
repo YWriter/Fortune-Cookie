@@ -1,0 +1,5 @@
+Happy
+Sad
+Neutral
+Annoyed
+Stressed
